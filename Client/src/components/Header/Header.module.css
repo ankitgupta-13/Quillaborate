@@ -1,0 +1,29 @@
+.header {
+  background-color: rgb(229, 237, 237);
+  /* max-width: fit-content; */
+  width: 90vw;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  /* border-radius: 50px; */
+}
+.left{
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.accountImage, .logo{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
