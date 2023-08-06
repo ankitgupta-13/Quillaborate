@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  gap: 1rem;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+input {
+  text-align: center;
+  width: 10rem;
+  height: 2rem;
+  border-radius: 50px;
+  border: 1px solid rgb(157, 172, 172);
+  padding: 0.5rem;
+  outline: none;
+  caret-color: transparent;
+}
+a {
+  cursor: pointer;
+}

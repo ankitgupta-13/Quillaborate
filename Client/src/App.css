@@ -13,7 +13,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 li {
   list-style-type: none;
   cursor: pointer;
@@ -24,7 +23,6 @@ li {
   align-items: center;
   /* background-color: rgb(157, 188, 188); */
 }
-
 
 /* #root {
   max-width: 1280px;

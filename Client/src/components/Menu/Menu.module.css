@@ -1,6 +1,22 @@
 .menu {
+  position: relative;
   display: flex;
   gap: 1rem;
   justify-content: center;
   align-items: center;
+}
+li {
+  font-size: small;
+}
+li:hover {
+  background-color: rgb(157, 172, 172);
+}
+.submenu {
+  position: absolute;
+  top: 50px;
+  background-color: rgb(157, 172, 172);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: small;
 }
