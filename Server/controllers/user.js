@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.login = exports.googleLogin = exports.createUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
+const token_1 = require("../middlewares/token");
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newUser = new User_1.default(req.body);
@@ -25,3 +26,49 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createUser = createUser;
+const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, username, avatar, googleId } = req.body;
+        const user = yield User_1.default.findOne({ email: email });
+        if (user) {
+            const token = (0, token_1.generateToken)(user._id);
+            res
+                .status(200)
+                .json({ message: "User logged in successfully", token: token });
+        }
+        else {
+            const newUser = new User_1.default({
+                email: email,
+                username: username,
+                avatar: avatar,
+                googleId: googleId,
+            });
+            yield newUser.save();
+            const token = (0, token_1.generateToken)(newUser._id);
+            res
+                .status(200)
+                .json({ message: "User logged in successfully", token: token });
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.googleLogin = googleLogin;
+const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const user = yield User_1.default.findOne({ email: email });
+        if (user) {
+            const token = (0, token_1.generateToken)(user._id);
+            res
+                .status(200)
+                .json({ message: "User logged in successfully", token: token });
+        }
+        res.status(404).send("User not found");
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.login = login;

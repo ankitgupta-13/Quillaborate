@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = __importDefault(require("./routes/user"));
+const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -31,6 +32,19 @@ mongoose_1.default.connection.on("error", (err) => {
     console.log(`DB connection error: ${err}`);
 });
 app.use(express_1.default.json());
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+app.use((0, cors_1.default)({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+    allowedHeaders: ["*"],
+}));
 app.use("/api/user", user_1.default);
 app.listen(8000, () => {
     connectDB();

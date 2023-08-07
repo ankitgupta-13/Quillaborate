@@ -2,6 +2,7 @@ import express from "express";
 import mongoose, { connect } from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,23 @@ mongoose.connection.on("error", (err) => {
 });
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+    allowedHeaders: ["*"],
+  })
+);
 
 app.use("/api/user", userRoutes);
 
