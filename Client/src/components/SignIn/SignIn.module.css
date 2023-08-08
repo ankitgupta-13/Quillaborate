@@ -14,15 +14,32 @@
   gap: 1rem;
 }
 input {
-  text-align: center;
-  width: 10rem;
+  width: 12rem;
   height: 2rem;
   border-radius: 50px;
   border: 1px solid rgb(157, 172, 172);
-  padding: 0.5rem;
+  padding: 1rem;
   outline: none;
   caret-color: transparent;
 }
+input:focus {
+  border: 2px solid rgb(68, 67, 67);
+}
 a {
+  cursor: pointer;
+}
+a:hover {
+  color: rgb(68, 67, 67);
+}
+.containerIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.eyeIcon {
+  position: absolute;
+  width: 1.25rem;
+  right: 20px;
+  object-fit: cover;
   cursor: pointer;
 }

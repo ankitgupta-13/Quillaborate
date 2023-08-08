@@ -59,6 +59,15 @@ const Header = () => {
   const closeSubmenu = () => {
     setOpenSubmenu(null);
   };
+  const handleUser = () => {
+    if (localStorage.getItem("token")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("avatar");
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className={style.header}>
@@ -83,9 +92,17 @@ const Header = () => {
           <img src={lock} alt="" className={style.lock} />
           Share
         </ButtonComponent>
-        <img src={account} alt="Not found!" className={style.accountImage} />
-        <ButtonComponent onClick={() => navigate("/login")}>
-          Sign in
+        <img
+          src={
+            localStorage.getItem("avatar")
+              ? window.localStorage.getItem("avatar").toString()
+              : account
+          }
+          alt="Not found!"
+          className={style.accountImage}
+        />
+        <ButtonComponent onClick={handleUser}>
+          {localStorage.getItem("token") ? "Logout" : "Login"}
         </ButtonComponent>
       </div>
     </div>

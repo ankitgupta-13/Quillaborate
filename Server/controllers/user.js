@@ -12,12 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.googleLogin = exports.createUser = void 0;
+exports.googleLogin = exports.login = exports.createUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const token_1 = require("../middlewares/token");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newUser = new User_1.default(req.body);
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const newUser = new User_1.default({
+            email: req.body.email,
+            username: req.body.username,
+            password: yield bcrypt_1.default.hash(req.body.password, salt),
+        });
         yield newUser.save();
         res.status(200).send("User has been created");
     }
@@ -26,17 +32,32 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createUser = createUser;
+const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const user = yield User_1.default.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const passwordCheck = yield bcrypt_1.default.compare(password, user.password);
+        if (!passwordCheck) {
+            return res.status(401).json({ message: "Invalid password" });
+        }
+        const token = (0, token_1.generateToken)(user._id);
+        res
+            .status(200)
+            .json({ message: "User logged in successfully", token: token });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.login = login;
 const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, username, avatar, googleId } = req.body;
         const user = yield User_1.default.findOne({ email: email });
-        if (user) {
-            const token = (0, token_1.generateToken)(user._id);
-            res
-                .status(200)
-                .json({ message: "User logged in successfully", token: token });
-        }
-        else {
+        if (!user) {
             const newUser = new User_1.default({
                 email: email,
                 username: username,
@@ -45,9 +66,19 @@ const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             });
             yield newUser.save();
             const token = (0, token_1.generateToken)(newUser._id);
-            res
+            return res
                 .status(200)
-                .json({ message: "User logged in successfully", token: token });
+                .json({
+                message: "User logged in successfully",
+                newUser,
+                token: token,
+            });
+        }
+        else {
+            const token = (0, token_1.generateToken)(user._id);
+            return res
+                .status(200)
+                .json({ message: "User logged in successfully", user, token: token });
         }
     }
     catch (err) {
@@ -55,20 +86,3 @@ const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.googleLogin = googleLogin;
-const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        const user = yield User_1.default.findOne({ email: email });
-        if (user) {
-            const token = (0, token_1.generateToken)(user._id);
-            res
-                .status(200)
-                .json({ message: "User logged in successfully", token: token });
-        }
-        res.status(404).send("User not found");
-    }
-    catch (err) {
-        next(err);
-    }
-});
-exports.login = login;

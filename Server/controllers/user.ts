@@ -1,8 +1,20 @@
 import User from "../models/User";
 import { generateToken } from "../middlewares/token";
-export const createUser = async (req, res, next) => {
+import bcrypt from "bcrypt";
+import { Request, Response, NextFunction } from "express";
+
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const newUser = new User(req.body);
+    const salt = await bcrypt.genSalt(10);
+    const newUser = new User({
+      email: req.body.email,
+      username: req.body.username,
+      password: await bcrypt.hash(req.body.password, salt),
+    });
     await newUser.save();
     res.status(200).send("User has been created");
   } catch (err) {
@@ -10,16 +22,39 @@ export const createUser = async (req, res, next) => {
   }
 };
 
-export const googleLogin = async (req, res, next) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const passwordCheck = await bcrypt.compare(password, user.password);
+    if (!passwordCheck) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+    const token = generateToken(user._id);
+    res
+      .status(200)
+      .json({ message: "User logged in successfully", token: token });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const googleLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email, username, avatar, googleId } = req.body;
     const user = await User.findOne({ email: email });
-    if (user) {
-      const token = generateToken(user._id);
-      res
-        .status(200)
-        .json({ message: "User logged in successfully", token: token });
-    } else {
+    if (!user) {
       const newUser = new User({
         email: email,
         username: username,
@@ -28,28 +63,20 @@ export const googleLogin = async (req, res, next) => {
       });
       await newUser.save();
       const token = generateToken(newUser._id);
-      res
+      return res
         .status(200)
-        .json({ message: "User logged in successfully", token: token });
-    }
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
-    if (user) {
+        .json({
+          message: "User logged in successfully",
+          newUser,
+          token: token,
+        });
+    } else {
       const token = generateToken(user._id);
-      res
+      return res
         .status(200)
-        .json({ message: "User logged in successfully", token: token });
+        .json({ message: "User logged in successfully", user, token: token });
     }
-    res.status(404).send("User not found");
   } catch (err) {
     next(err);
   }
 };
-git fetch vs pull

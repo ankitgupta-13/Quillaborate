@@ -13,11 +13,11 @@ const UserSchema = new mongoose_1.default.Schema({
     username: {
         type: String,
         required: true,
-        unique: false,
+        unique: true,
     },
     googleId: {
         type: String,
-        unique: true,
+        unique: false,
     },
     avatar: {
         type: String,
