@@ -1,6 +1,7 @@
 .menu {
   position: relative;
   display: flex;
+  cursor: pointer;
   gap: 1rem;
   justify-content: center;
   align-items: center;
@@ -11,9 +12,16 @@ li {
 li:hover {
   background-color: rgb(157, 172, 172);
 }
+.submenuItem:hover{
+  color: aliceblue;
+  width: 100%;
+  /* border: 2px solid red; */
+}
 .submenu {
   position: absolute;
   top: 50px;
+  z-index: 2;
+  padding: 10px;
   background-color: rgb(157, 172, 172);
   display: flex;
   flex-direction: column;
