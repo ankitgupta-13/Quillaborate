@@ -95,7 +95,7 @@ const SignIn = () => {
         }}
       />
 
-      <a onClick={() => navigate("/forgotPassword")}>Forgot Password</a>
+      <a onClick={() => navigate("/resetPassword")}>Forgot Password</a>
       <a onClick={() => navigate("/register")}>
         Don't have an account? Create Account
       </a>

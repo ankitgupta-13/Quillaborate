@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.googleLogin = exports.login = exports.createUser = void 0;
+exports.resetPassword = exports.googleLogin = exports.login = exports.createUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const token_1 = require("../middlewares/token");
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -66,9 +66,7 @@ const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             });
             yield newUser.save();
             const token = (0, token_1.generateToken)(newUser._id);
-            return res
-                .status(200)
-                .json({
+            return res.status(200).json({
                 message: "User logged in successfully",
                 newUser,
                 token: token,
@@ -86,3 +84,16 @@ const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.googleLogin = googleLogin;
+const resetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email } = req.body;
+        const user = yield User_1.default.findOne({ email: email });
+        if (!user) {
+            return res.status(404).json({ message: "Please enter a valid email" });
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.resetPassword = resetPassword;

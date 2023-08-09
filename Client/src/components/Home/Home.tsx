@@ -9,6 +9,8 @@ import {
   QuickToolbar,
 } from "@syncfusion/ej2-react-richtexteditor";
 import Header from "../Header/Header";
+import { io } from "socket.io-client";
+import { useEffect } from "react";
 
 const Home = () => {
   const tools: object = {
@@ -46,6 +48,14 @@ const Home = () => {
       "FullScreen",
     ],
   };
+
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <div className="container">
       <Header />

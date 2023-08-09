@@ -17,6 +17,19 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = __importDefault(require("./routes/user"));
 const cors_1 = __importDefault(require("cors"));
+const socket_io_1 = require("socket.io");
+const io = new socket_io_1.Server(3001, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"],
+    },
+});
+io.on("connection", (socket) => {
+    console.log("connected");
+    socket.on("disconnect", () => {
+        console.log("disconnected");
+    });
+});
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,7 +52,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],

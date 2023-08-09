@@ -1,8 +1,23 @@
 import express from "express";
-import mongoose, { connect } from "mongoose";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user";
 import cors from "cors";
+import { Server } from "socket.io";
+
+const io = new Server(3001, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("connected");
+  socket.on("disconnect", () => {
+    console.log("disconnected");
+  });
+});
 
 dotenv.config();
 const app = express();
@@ -31,7 +46,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],

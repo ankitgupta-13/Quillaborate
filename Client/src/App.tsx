@@ -4,7 +4,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import SignIn from "./components/SignIn/SignIn";
-import ForgotPassword from "./components/SignIn/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/SignIn/ResetPassword/ResetPassword";
 import SignUp from "./components/SignUp/SignUp";
 
@@ -16,7 +15,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
         </Routes>
       </Router>

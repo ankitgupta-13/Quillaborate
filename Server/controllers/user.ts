@@ -63,19 +63,34 @@ export const googleLogin = async (
       });
       await newUser.save();
       const token = generateToken(newUser._id);
-      return res
-        .status(200)
-        .json({
-          message: "User logged in successfully",
-          newUser,
-          token: token,
-        });
+      return res.status(200).json({
+        message: "User logged in successfully",
+        newUser,
+        token: token,
+      });
     } else {
       const token = generateToken(user._id);
       return res
         .status(200)
         .json({ message: "User logged in successfully", user, token: token });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const {email} = req.body;
+    const user = await User.findOne({email:email})
+    if(!user){
+      return res.status(404).json({message:"Please enter a valid email"})
+    }
+    
   } catch (err) {
     next(err);
   }
