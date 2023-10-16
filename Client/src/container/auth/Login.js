@@ -35,8 +35,8 @@ const Login = ({ setUserData }) => {
         setUserData(dataUser);
         // localStorage.setItem('doc-user', JSON.stringify(dataUser))
         localStorage.setItem("token", res.data.token);
-        console.log(res.data);
-        alert("User logged in");
+        localStorage.setItem("userId", res.data.userId);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         navigate("/dashboard", { replace: true });
       } else {
         toast.error(res.data.message);

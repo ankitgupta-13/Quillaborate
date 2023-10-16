@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "../../component/modal/Loader";
 import emptyDoc from "../../assets/img/error-img.png";
+import deleteIcon from "../../assets/img/delete.png";
 
 // const arrDoc = [
 // {
@@ -35,7 +36,18 @@ const DocumentUser = () => {
   const [listDocument, setListDocument] = useState([]);
 
   const navigate = useNavigate();
-
+  async function fetchAllDocs() {
+    const res = await fetch("http://localhost:8000/api/doc/getAllDocs", {
+      method: "GET",
+      headers: {
+        // Authorization: `${localStorage.getItem("token")}`,
+        Authorization: `${localStorage.getItem("userId")}`,
+      },
+    });
+    const data = await res.json();
+    setListDocument(data.docs);
+    console.log(data.docs);
+  }
   useEffect(() => {
     // async function fetchDocument(){
     //     showLoader(true)
@@ -61,22 +73,23 @@ const DocumentUser = () => {
     //     }
     // }
 
-    async function fetchAllDocs() {
-      const res = await fetch("/getAllDocs", {
-        method: "GET",
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      });
-      const data = await res.json();
-      console.log(data);
-    }
     fetchAllDocs();
   }, []);
 
-  const handleSignDocument = (docID) => {
+  const handleOpenDocument = (docID) => {
     showLoader(true);
-    navigate("/dashboard/document-detail/" + docID);
+    navigate("/document/" + docID);
+  };
+
+  const handleDeleteDocumnet = async (docId) => {
+    await fetch("http://localhost:8000/api/doc/deleteDocument", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ docId: docId }),
+    });
+    fetchAllDocs();
   };
 
   return (
@@ -90,23 +103,41 @@ const DocumentUser = () => {
               className="bg-white rounded-lg shadow-lg w-40 md:w-56 flex flex-col justify-center items-center text-center p-4 md:p-6 m-2 md:m-5"
               key={key}
             >
-              <LazyLoadImage effect="blur" src={docIcon} alt="" width="90%" />
               <h1 className="font-bold text-sm md:text-base mt-3">
-                {data.e_tittle}
+                {data.title.toUpperCase()}
               </h1>
-              <p
+              <LazyLoadImage effect="blur" src={docIcon} alt="" width="90%" />
+
+              {/* <p
                 className="font-medium mt-1 mb-4 text-xsm md:text-xs"
                 style={{ width: "90%" }}
               >
                 {data.c_desc}
-              </p>
-              <button
+              </p> */}
+              <div className="flex justify-between items-center text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105">
+                <button
+                  // className="text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
+                  style={{ width: "90%" }}
+                  onClick={() => handleOpenDocument(data._id)}
+                >
+                  Open Document
+                </button>
+                <img
+                  src={deleteIcon}
+                  alt="deleteIcon"
+                  className="h-6 w-6 cursor-pointer"
+                  onClick={() => handleDeleteDocumnet(data._id)}
+                />
+              </div>
+              {/* <button
                 className="text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
                 style={{ width: "90%" }}
-                onClick={() => handleSignDocument(data.i_id)}
+                onClick={() => {
+                  handleDeleteDocumnet();
+                }}
               >
-                Sign Now
-              </button>
+                Delete Document
+              </button> */}
             </div>
           ))
         ) : (
@@ -117,7 +148,10 @@ const DocumentUser = () => {
             </p>
           </div>
         )}
-        <button onClick={() => navigate(`/document-example`)}>
+        <button
+          className="text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
+          onClick={() => navigate(`/document-example`)}
+        >
           Create Document
         </button>
       </div>

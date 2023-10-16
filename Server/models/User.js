@@ -14,9 +14,9 @@ const UserSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    // googleId: {
-    //   type: String,
-    // },
+    googleId: {
+        type: String,
+    },
     avatar: {
         type: String,
     },

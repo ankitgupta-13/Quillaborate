@@ -18,11 +18,11 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers["authorization"];
+  const token: string = req.headers.authorization;
   if (!token) {
     return res.status(401).json({ mess: "Access denied. No token provided." });
   }
-  jwt.verify(token, process.env.SECRET_KEY, (err, decoded:JwtPayload) => {
+  jwt.verify(token, process.env.JWT, (err, decoded: JwtPayload) => {
     if (err) {
       return res.status(403).json({ mess: "Invalid token." });
     }

@@ -12,14 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
+exports.deleteDocument = exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
 const Document_1 = __importDefault(require("../models/Document"));
 const saveDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
-    const document = new Document_1.default({
-        title: req.body.title,
-        data: req.body.data,
-    });
+    const document = new Document_1.default(req.body);
     try {
         yield document.save();
         res.status(201).json(document);
@@ -31,7 +27,7 @@ const saveDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.saveDocument = saveDocument;
 const getAllDocuments = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const docs = yield Document_1.default.find({ creator: req.body });
+        const docs = yield Document_1.default.find({ creator: req.headers.authorization });
         res.status(200).json({ docs: docs });
     }
     catch (err) {
@@ -49,3 +45,13 @@ const getDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getDocument = getDocument;
+const deleteDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield Document_1.default.deleteOne({ _id: req.body.docId });
+        res.status(200).json({ mess: "Document deleted successfully!" });
+    }
+    catch (err) {
+        res.status(400).json({ mess: err.message });
+    }
+});
+exports.deleteDocument = deleteDocument;

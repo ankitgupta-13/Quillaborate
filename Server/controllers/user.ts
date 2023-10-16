@@ -9,14 +9,12 @@ export const createUser = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
     const salt = await bcrypt.genSalt(10);
     const newUser = new User({
       email: req.body.email,
       name: req.body.name,
       password: await bcrypt.hash(req.body.password, salt),
     });
-    console.log(req.body);
     await newUser.save();
     res.status(200).send("User has been created");
   } catch (err) {
@@ -30,7 +28,6 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -41,9 +38,12 @@ export const login = async (
       return res.status(401).json({ message: "Invalid password" });
     }
     const token = generateToken(user._id);
-    res
-      .status(200)
-      .json({ message: "User logged in successfully", token: token });
+    res.status(200).json({
+      message: "User logged in successfully",
+      token: token,
+      userId: user._id,
+      user: user,
+    });
   } catch (err) {
     next(err);
   }
@@ -88,12 +88,11 @@ export const resetPassword = async (
   next: NextFunction
 ) => {
   try {
-    const {email} = req.body;
-    const user = await User.findOne({email:email})
-    if(!user){
-      return res.status(404).json({message:"Please enter a valid email"})
+    const { email } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ message: "Please enter a valid email" });
     }
-    
   } catch (err) {
     next(err);
   }

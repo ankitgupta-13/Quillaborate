@@ -14,8 +14,8 @@ const DocumentSchema = new mongoose_1.default.Schema({
         required: true,
     },
     creator: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
+        required: true,
     },
     collaborators: [
         {

@@ -11,22 +11,26 @@ import Dashboard from "./pages/Dashboard";
 import DocumentPage from "./pages/DocumentPage";
 import Home from "./pages/Home";
 import DocumentUser from "./container/user/DocumentUser";
+import DocumentDetail from "./container/admin/DocumentDetail";
 // import PDFViewer from "./pages/PDFViewer"
+// import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   return (
     <div className="font-poppins">
       <Router /* basename="mou" */>
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate replace to="auth/sign-in" />} />
+          {/* <Route path="/home" element={<Home />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/document-user" element={<DocumentUser />} />
           <Route path="/auth/*" element={<Auth />} />
+          <Route path="/document/:document_id" element={<DocumentPage />} />
           <Route path="/document-example" element={<DocumentPage />} />
+          {/* <Route path="/document-detail/:document_id" element={<DocumentDetail />} /> */}
           {/* <Route path='/pdf-example' element={<PDFViewer />} /> */}
           {/* <Route path='/dragdrop-example' element={<DragDropExample />} /> */}
           {/* <Route path='*' element={<Navigate replace to='/dashboard' />} /> */}
-          {/* <Route path='*' element={<Navigate replace to='/' />} /> */}
         </Routes>
       </Router>
       <div className="text-sms">

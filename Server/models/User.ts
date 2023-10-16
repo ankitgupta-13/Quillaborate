@@ -11,9 +11,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // googleId: {
-    //   type: String,
-    // },
+    googleId: {
+      type: String,
+    },
     avatar: {
       type: String,
     },

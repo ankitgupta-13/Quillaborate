@@ -14,11 +14,11 @@ const generateToken = (userId) => {
 };
 exports.generateToken = generateToken;
 const authenticateToken = (req, res, next) => {
-    const token = req.headers["authorization"];
+    const token = req.headers.authorization;
     if (!token) {
         return res.status(401).json({ mess: "Access denied. No token provided." });
     }
-    jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    jsonwebtoken_1.default.verify(token, process.env.JWT, (err, decoded) => {
         if (err) {
             return res.status(403).json({ mess: "Invalid token." });
         }
