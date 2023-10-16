@@ -1,0 +1,15 @@
+{
+  "short_name": "MoU Doc",
+  "name": "MoU Document Editor and Contrib (Sign)",
+  "icons": [
+    {
+      "src": "mou_icon.png",
+      "type": "image/png",
+      "sizes": "500x500"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#991b1b",
+  "background_color": "#f5f5f5"
+}
