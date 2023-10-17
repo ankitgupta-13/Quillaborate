@@ -1,10 +1,10 @@
 {
-  "short_name": "MoU Doc",
+  "short_name": "Quillaborate",
   "name": "MoU Document Editor and Contrib (Sign)",
   "icons": [
     {
-      "src": "mou_icon.png",
-      "type": "image/png",
+      "src": "document.jpg",
+      "type": "image/jpg",
       "sizes": "500x500"
     }
   ],

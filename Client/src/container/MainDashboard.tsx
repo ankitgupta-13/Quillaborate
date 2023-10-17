@@ -16,7 +16,7 @@ const MainDashboard: FC<Props> = ({ user }) => {
             Welcome Back!{" "}
             {/* <span className="font-semibold">
               {JSON.parse(localStorage.getItem("user")).name || "User"}
-            </span> */}
+            </span>  */}
           </p>
         </div>
         <div className="bg-white px-5 py-6 rounded-bl-lg rounded-br-lg">

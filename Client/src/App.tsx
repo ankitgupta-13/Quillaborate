@@ -9,11 +9,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DocumentPage from "./pages/DocumentPage";
 import DocumentUser from "./container/user/DocumentUser";
-import DocumentDetail from "./container/admin/DocumentDetail";
-import History from "./container/user/History";
 import Profile from "./container/Profile";
-// import PDFViewer from "./pages/PDFViewer"
-// import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   return (
@@ -22,7 +18,19 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to="auth/sign-in" />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard/document-user/dashboard"
+            element={<Navigate replace to="/dashboard" />}
+          />
+          <Route
+            path="/dashboard/dashboard"
+            element={<Navigate replace to="/dashboard" />}
+          />
           <Route path="/dashboard/document-user" element={<DocumentUser />} />
+          <Route
+            path="/dashboard/document-user/document-user"
+            element={<Navigate replace to="/dashboard/document-user" />}
+          />
           <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/document/:document_id" element={<DocumentPage />} />
