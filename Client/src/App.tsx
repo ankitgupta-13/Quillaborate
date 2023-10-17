@@ -5,25 +5,25 @@ import {
   Navigate,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-// import DragDropExample from "./component/DragDropExample"
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import DocumentPage from "./pages/DocumentPage";
-import Home from "./pages/Home";
 import DocumentUser from "./container/user/DocumentUser";
 import DocumentDetail from "./container/admin/DocumentDetail";
+import History from "./container/user/History";
+import Profile from "./container/Profile";
 // import PDFViewer from "./pages/PDFViewer"
 // import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   return (
     <div className="font-poppins">
-      <Router /* basename="mou" */>
+      <Router>
         <Routes>
           <Route path="/" element={<Navigate replace to="auth/sign-in" />} />
-          {/* <Route path="/home" element={<Home />} /> */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/document-user" element={<DocumentUser />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/auth/*" element={<Auth />} />
           <Route path="/document/:document_id" element={<DocumentPage />} />
           <Route path="/document-example" element={<DocumentPage />} />

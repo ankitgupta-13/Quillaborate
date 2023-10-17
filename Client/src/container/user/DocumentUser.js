@@ -1,5 +1,5 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import docIcon from "../../assets/img/mou_icon.png";
+import docIcon from "../../assets/img/document.jpg";
 import { useState, useEffect } from "react";
 import { getDocumentByUser } from "../../api/document-api";
 import { useNavigate } from "react-router-dom";
@@ -7,29 +7,6 @@ import { toast } from "react-toastify";
 import Loader from "../../component/modal/Loader";
 import emptyDoc from "../../assets/img/error-img.png";
 import deleteIcon from "../../assets/img/delete.png";
-
-// const arrDoc = [
-// {
-//     e_tittle: 'Document Title',
-//     c_desc: 'Description of the document blablab ba',
-// },
-// {
-//     e_tittle: 'Document Title',
-//     c_desc: 'Description of the document blablab ba',
-// },
-// {
-//     e_tittle: 'Document Title',
-//     c_desc: 'Description of the document blablab ba',
-// },
-// {
-//     e_tittle: 'Document Title',
-//     c_desc: 'Description of the document blablab ba',
-// },
-// {
-//     e_tittle: 'Document Title',
-//     c_desc: 'Description of the document blablab ba',
-// },
-// ]
 
 const DocumentUser = () => {
   const [loader, showLoader] = useState(false);
@@ -49,30 +26,6 @@ const DocumentUser = () => {
     console.log(data.docs);
   }
   useEffect(() => {
-    // async function fetchDocument(){
-    //     showLoader(true)
-    //     const res = await getDocumentByUser(false)
-
-    //     showLoader(false)
-    //     console.log('Fetch document :', res)
-    //     if(res.data){
-    //         if(res.data.status === '00'){
-    //             setListDocument(res.data.data)
-    //         }else if(res.data.status === '01'){
-    //             toast.info('Session expired, please login!')
-    //             navigate('/auth', {replace:true})
-    //         }else{
-    //             if(res.data.message){
-    //                 toast.error(res.data.message)
-    //             }else{
-    //                 toast.error(`${res.config?.url} ${res.status} ${res.statusText}`)
-    //             }
-    //         }
-    //     }else{
-    //         toast.error(`${res.config?.url} ${res.message}`)
-    //     }
-    // }
-
     fetchAllDocs();
   }, []);
 
@@ -106,15 +59,8 @@ const DocumentUser = () => {
               <h1 className="font-bold text-sm md:text-base mt-3">
                 {data.title.toUpperCase()}
               </h1>
-              <LazyLoadImage effect="blur" src={docIcon} alt="" width="90%" />
-
-              {/* <p
-                className="font-medium mt-1 mb-4 text-xsm md:text-xs"
-                style={{ width: "90%" }}
-              >
-                {data.c_desc}
-              </p> */}
-              <div className="flex justify-between items-center text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105">
+              <LazyLoadImage src={docIcon} alt="" width="90%" className="w-100 border-10 p-1" />
+              <div className="flex justify-between items-center text-white bg-red-500 hover:bg-red-900 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105">
                 <button
                   // className="text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
                   style={{ width: "90%" }}

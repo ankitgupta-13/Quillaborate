@@ -72,12 +72,6 @@ const Sidebar = ({user, collapse}) => {
         }
     }
 
-    const handleClickLogo = () => {
-        navigate('/', {replace: true})
-        window.location.reload()
-    }
-
-    
     const getRoutesPath = () => {
         return menuList?.map(({name_var, url_var, icon_var, children}, key) => 
             <div key={key} className='mb-5 font-medium'>
@@ -189,12 +183,12 @@ const Sidebar = ({user, collapse}) => {
                 </div> */}
 
                 <div id="sidebar" ref={sidebar}
-                    className={`absolute z-40 left-0 top-0 md:static md:left-auto md:top-auto h-screen bg-red-800 md:translate-x-0 transform transition-all duration-700 ease-in-out
+                    className={`absolute z-40 left-0 top-0 md:static md:left-auto md:top-auto h-screen bg-orange-800 md:translate-x-0 transform transition-all duration-700 ease-in-out
                     ${sidebarOpen? 'translate-x-0' : '-translate-x-64'} ${collapse? 'w-64 2xl:w-72':'md:w-[4.4rem] 2xl:w-[5rem]'} `}
                 >
                     <div className={`overflow-y-auto overflow-x-hidden h-full flex flex-col items-center text-white text-left`}>
                         <div className='cursor-pointer z-10 w-full px-4 mb-8 mt-6 text-center'>
-                            <span className='mt-2 cursor-pointer' onClick={handleClickLogo}>{collapse? 'MoU Document' : 'MoU'}</span>
+                            <span className='mt-2 cursor-pointer' >{collapse? 'Quillaborate' : 'Quill'}</span>
                         </div>
 
                         {collapse?

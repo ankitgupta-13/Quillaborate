@@ -123,7 +123,7 @@ const Login = ({ setUserData }) => {
             <Link to="/auth/sign-up">Sign Up</Link>
           </span>
         </div>
-        <p>© {new Date().getFullYear()} CompanyName v1.0</p>
+        {/* <p>© {new Date().getFullYear()} CompanyName v1.0</p> */}
       </div>
 
       {loader && <Loader />}

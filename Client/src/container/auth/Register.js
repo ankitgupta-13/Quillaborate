@@ -106,7 +106,7 @@ const Register =  () => {
                         </Link>
                     </span>
                 </div>
-                <p>© {new Date().getFullYear()} CompanyName v1.0</p>
+                {/* <p>© {new Date().getFullYear()} CompanyName v1.0</p> */}
             </div>
         </div>
     )
