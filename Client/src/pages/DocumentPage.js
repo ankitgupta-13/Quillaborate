@@ -10,6 +10,8 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getOneDocument } from "../api/document-api";
 import { baseURL } from "../api/common-api";
+import lockIcon from "../assets/img/lock.svg";
+import ModalShare from "../component/modal/ModalShare";
 // Inject require module.
 DocumentEditorContainerComponent.Inject(
   SfdtExport,
@@ -24,6 +26,7 @@ function DocumentPage() {
   const { document_id } = useParams();
   const [filename, setFilename] = useState("");
   const navigate = useNavigate();
+  const [modalOut, showModalOut] = useState(false);
 
   const handleSaveDocument = async () => {
     try {
@@ -52,6 +55,11 @@ function DocumentPage() {
     } catch (err) {
       console.log("Err:", err);
     }
+  };
+
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    showModalOut(false);
   };
 
   const readBlobAsText = (blob) => {
@@ -89,26 +97,6 @@ function DocumentPage() {
       .then((buf) => new File([buf], filename, { type: mimeType }));
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const docxFile = await urltoFile(
-  //       file.data,
-  //       "test.docx",
-  //       "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  //     );
-  //     const fileReader = new FileReader();
-
-  //     fileReader.readAsText(docxFile);
-
-  //     fileReader.onload = (e) => {
-  //       const contents = e.target.result;
-  //       // console.log(contents)
-  //       documentEditorRef.current.documentEditor.open(contents);
-  //     };
-  //   };
-
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       const res = await getOneDocument(document_id);
@@ -134,23 +122,43 @@ function DocumentPage() {
         enableWordExport={true}
         serviceUrl="https://ej2services.syncfusion.com/production/web-services/api/documenteditor/"
       />
-      <div className="flex gap-3 items-center justify-center text-white bg-red-600 hover:bg-red-650 py-2 md:py-2.5 font-medium transition ">
-        <input
-          placeholder="Enter FileName"
-          onChange={(e) => setFilename(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSaveDocument();
-          }}
-          value={filename}
-          className="outline-none border-1 rounded  w-40 text-black "
-          required
+      {modalOut && (
+        <ModalShare
+          message="enter email to share"
+          onCancel={() => showModalOut(false)}
+          onCopy={() => copyLink()}
         />
-        <button
-          onClick={handleSaveDocument}
-          className="px-3 bg-red-700 hover:bg-red-800 font-medium transition duration-200 ease-in-out transform hover:scale-105"
-        >
-          Save
-        </button>
+      )}
+      <div className="flex w-full items-center justify-between bg-red-600 hover:bg-red-650">
+        <div></div>
+        <div className="flex gap-3 items-center justify-center text-white bg-red-600 hover:bg-red-650 py-2 md:py-2.5 font-medium transition ">
+          <input
+            placeholder="Enter FileName"
+            onChange={(e) => setFilename(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSaveDocument();
+            }}
+            value={filename}
+            className="outline-none border-1 rounded  w-40 text-black "
+            required
+          />
+          <button
+            onClick={handleSaveDocument}
+            className="px-3 bg-blue-200 hover:bg-red-800 font-medium transition duration-200 ease-in-out transform hover:scale-105"
+          >
+            Save
+          </button>
+        </div>
+        <div>
+          <button
+            on
+            className="flex text-black bg-blue-200 hover:bg-red-650 rounded-md w-24 p-1"
+            onClick={() => showModalOut(true)}
+          >
+            <img src={lockIcon} alt="" />
+            Share
+          </button>
+        </div>
       </div>
     </div>
   );

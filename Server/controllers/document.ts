@@ -1,5 +1,6 @@
 import Document from "../models/Document";
 import { Request, Response, NextFunction } from "express";
+import nodeMailer from "nodemailer";
 
 export const saveDocument = async (req: Request, res: Response) => {
   const document = new Document(req.body);
@@ -33,12 +34,41 @@ export const getDocument = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteDocument = async (req: Request, res: Response) =>{
-  try{
-    await Document.deleteOne({_id:req.body.docId});
-    res.status(200).json({mess:"Document deleted successfully!"})
+export const deleteDocument = async (req: Request, res: Response) => {
+  try {
+    await Document.deleteOne({ _id: req.body.docId });
+    res.status(200).json({ mess: "Document deleted successfully!" });
+  } catch (err) {
+    res.status(400).json({ mess: err.message });
   }
-  catch(err){
-    res.status(400).json({mess:err.message});
-  }
-} 
+};
+
+export const shareDocument = async (req: Request, res: Response) => {
+  const { url, senderEmail, receiverEmail } = req.body;
+  mailer(url, senderEmail, receiverEmail);
+};
+
+const mailer = (url, senderEmail, receiverEmail) => {
+  const transporter = nodeMailer.createTransport({
+    service: "gmail",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+  var mailOptions = {
+    from: senderEmail,
+    to: receiverEmail,
+    subject: "URL for the document",
+    text: `Your URL is ${url}`,
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};

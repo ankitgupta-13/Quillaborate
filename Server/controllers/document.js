@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteDocument = exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
+exports.shareDocument = exports.deleteDocument = exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
 const Document_1 = __importDefault(require("../models/Document"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const saveDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const document = new Document_1.default(req.body);
     try {
@@ -55,3 +56,33 @@ const deleteDocument = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteDocument = deleteDocument;
+const shareDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { url, senderEmail, receiverEmail } = req.body;
+    mailer(url, senderEmail, receiverEmail);
+});
+exports.shareDocument = shareDocument;
+const mailer = (url, senderEmail, receiverEmail) => {
+    const transporter = nodemailer_1.default.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
+        },
+    });
+    var mailOptions = {
+        from: senderEmail,
+        to: receiverEmail,
+        subject: "URL for the document",
+        text: `Your URL is ${url}`,
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log("Email sent: " + info.response);
+        }
+    });
+};

@@ -10,4 +10,5 @@ router.post("/saveDocument", document_1.saveDocument);
 router.post("/deleteDocument", document_1.deleteDocument);
 router.get("/getAllDocs", document_1.getAllDocuments);
 router.get("/:id", document_1.getDocument);
+router.post("/shareDocument", document_1.shareDocument);
 exports.default = router;
