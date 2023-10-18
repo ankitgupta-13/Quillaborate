@@ -113,7 +113,7 @@ const Login = ({ setUserData }) => {
                 Welcome Back! Sign in to continue
               </h1>
             </div>
-            <div className="divide-y divide-gray-200">
+            <div className="flex flex-col gap-3">
               <div className="py-8 leading-6 space-y-4 text-gray-700 md:text-sm sm:leading-7">
                 <div className="relative">
                   <input
@@ -157,22 +157,26 @@ const Login = ({ setUserData }) => {
                     Password
                   </label>
                 </div>
-                <div className="relative flex justify-center">
+                <div className="relative flex justify-center top-7">
                   <button className="flex  text-sm bg-gradient-to-r from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-5 py-2 mt-1 border-1 border-transparent hover:border-red-800 hover:text-red-800">
                     Submit
                   </button>
                 </div>
-                <span className="flex justify-center ">or</span>
-                <div className="flex justify-center ">
-                  <GoogleLogin
-                    onSuccess={(credentialResponse) => {
-                      createOrGetUser(credentialResponse);
-                    }}
-                    onError={() => {
-                      console.log("Login Failed");
-                    }}
-                  />
-                </div>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <hr class="h-px bg-gray-200 border-0 w-40 dark:bg-gray-700" />
+                <div className="flex justify-center ">or</div>
+                <hr class="h-px bg-gray-200 border-0 w-40 dark:bg-gray-700" />
+              </div>
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    createOrGetUser(credentialResponse);
+                  }}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                />
               </div>
             </div>
           </div>
