@@ -1,14 +1,13 @@
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import docIcon from "../../assets/img/document.jpg";
+import docIcon from "../../assets/img/doc_icon.png";
 import { useState, useEffect } from "react";
-import { getDocumentByUser } from "../../api/document-api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import Loader from "../../component/modal/Loader";
 import emptyDoc from "../../assets/img/error-img.png";
 import deleteIcon from "../../assets/img/delete.png";
 import Sidebar from "../../component/Sidebar";
 import Header from "../../component/Header";
+import { baseURL } from "../../api/common-api";
 
 const DocumentUser = () => {
   const [loader, showLoader] = useState(false);
@@ -16,10 +15,9 @@ const DocumentUser = () => {
 
   const navigate = useNavigate();
   async function fetchAllDocs() {
-    const res = await fetch("http://localhost:8000/api/doc/getAllDocs", {
+    const res = await fetch(`${baseURL}/api/doc/getAllDocs`, {
       method: "GET",
       headers: {
-        // Authorization: `${localStorage.getItem("token")}`,
         Authorization: `${localStorage.getItem("userId")}`,
       },
     });
@@ -37,7 +35,7 @@ const DocumentUser = () => {
   };
 
   const handleDeleteDocumnet = async (docId) => {
-    await fetch("http://localhost:8000/api/doc/deleteDocument", {
+    await fetch(`${baseURL}/api/doc/deleteDocument`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +77,6 @@ const DocumentUser = () => {
                 />
                 <div className="flex justify-between items-center text-white bg-red-500 hover:bg-red-900 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105">
                   <button
-                    // className="text-white bg-red-600 hover:bg-red-800 rounded-lg w-full py-2 md:py-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
                     style={{ width: "90%" }}
                     onClick={() => handleOpenDocument(data._id)}
                   >

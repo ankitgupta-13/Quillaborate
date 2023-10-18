@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
-import { authLogin } from "../../api/common-api";
+import { authLogin, baseURL } from "../../api/common-api";
 import ErrorField from "../../component/ErrorField";
 import Loader from "../../component/modal/Loader";
 import { setUserData } from "../../reduxs/action/actions";
 import { Link } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 const Login = ({ setUserData }) => {
   const [loader, showLoader] = useState(false);
@@ -30,10 +32,7 @@ const Login = ({ setUserData }) => {
       console.log(res.data);
       if (res.status === 200) {
         const dataUser = { ...res.data.data };
-        // delete dataUser.token
-
         setUserData(dataUser);
-        // localStorage.setItem('doc-user', JSON.stringify(dataUser))
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data.userId);
         localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -45,6 +44,58 @@ const Login = ({ setUserData }) => {
     } else {
       toast.error(res.config.baseURL + " " + res.message);
       showLoader(false);
+    }
+  };
+
+  const createOrGetUser = async (response) => {
+    const decoded = jwt_decode(response.credential);
+    const { name, picture, sub, email } = decoded;
+    const googleUser = {
+      name,
+      email,
+      avatar: picture,
+      googleId: sub,
+    };
+
+    const result = await fetch(`${baseURL}/api/user/googleLogin`, {
+      method: "POST",
+      credentials: "include",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(googleUser),
+    });
+    if (result.status === 200) {
+      const data = await result.json();
+      console.log(data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.user._id);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/dashboard");
+      toast("You are successfully logged in!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        type: "success",
+        theme: "colored",
+      });
+    } else {
+      toast("Invalid Credentials!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        type: "error",
+        theme: "colored",
+      });
     }
   };
 
@@ -106,10 +157,21 @@ const Login = ({ setUserData }) => {
                     Password
                   </label>
                 </div>
-                <div className="relative">
-                  <button className="text-sm bg-gradient-to-r from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-5 py-2 mt-1 border-1 border-transparent hover:border-red-800 hover:text-red-800">
+                <div className="relative flex justify-center">
+                  <button className="flex  text-sm bg-gradient-to-r from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-5 py-2 mt-1 border-1 border-transparent hover:border-red-800 hover:text-red-800">
                     Submit
                   </button>
+                </div>
+                <span className="flex justify-center ">or</span>
+                <div className="flex justify-center ">
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => {
+                      createOrGetUser(credentialResponse);
+                    }}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
                 </div>
               </div>
             </div>

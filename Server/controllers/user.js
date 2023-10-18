@@ -58,28 +58,19 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
 exports.login = login;
 const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, username, avatar, googleId } = req.body;
-        const user = yield User_1.default.findOne({ email: email });
+        const user = yield User_1.default.findOne({ email: req.body.email });
         if (!user) {
-            const newUser = new User_1.default({
-                email: email,
-                username: username,
-                avatar: avatar,
-                googleId: googleId,
-            });
+            const newUser = new User_1.default(req.body);
             yield newUser.save();
             const token = (0, token_1.generateToken)(newUser._id);
             return res.status(200).json({
-                message: "User logged in successfully",
-                newUser,
+                user: newUser,
                 token: token,
             });
         }
         else {
             const token = (0, token_1.generateToken)(user._id);
-            return res
-                .status(200)
-                .json({ message: "User logged in successfully", user, token: token });
+            return res.status(200).json({ user, token: token });
         }
     }
     catch (err) {

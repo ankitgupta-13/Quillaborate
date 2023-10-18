@@ -17,18 +17,6 @@ export const RouteUserRole = [
     icon_var: "ri-book-open-fill",
     children: [],
   },
-  // {
-  //     name_var: 'History',
-  //     url_var: 'sign-history',
-  //     icon_var: 'ri-history-fill',
-  //     children: []
-  // },
-  // {
-  //     name_var: 'Profile',
-  //     url_var: 'profile',
-  //     icon_var: 'ri-user-5-fill',
-  //     children: []
-  // }
 ];
 
 export const DashboardRoutes = [

@@ -66,14 +66,23 @@ function UserMenu({ user }) {
         onClick={() => setDropdownOpen(!dropdownOpen)}
       >
         <div className="w-9 h-9 rounded-full bg-gray-400">
-          <LazyLoadImage
-            src={`https://ui-avatars.com/api/?name=${
+          {Object.keys(JSON.parse(localStorage.getItem("user"))).includes(
+            "avatar"
+          ) ? (
+            <LazyLoadImage
+              src={JSON.parse(localStorage.getItem("user")).avatar}
+              className="rounded-full"
+            />
+          ) : (
+            <LazyLoadImage
+              src={`https://ui-avatars.com/api/?name=${
                 JSON.parse(localStorage.getItem("user")).name || "User"
-            }&background=${
-              BG_AVATAR[Math.floor(Math.random() * BG_AVATAR.length)]
-            }&color=fff`}
-            className="rounded-full"
-          />
+              }&background=${
+                BG_AVATAR[Math.floor(Math.random() * BG_AVATAR.length)]
+              }&color=fff`}
+              className="rounded-full"
+            />
+          )}
         </div>
         <div className="flex items-center truncate">
           <span className="truncate ml-2 text-sm font-medium group-hover:text-red-600">
@@ -95,10 +104,6 @@ function UserMenu({ user }) {
             onFocus={() => setDropdownOpen(true)}
             onBlur={() => setDropdownOpen(false)}
           >
-            {/* <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200">
-                        <div className="font-medium text-gray-800">{userLocalStorage?.e_fullname || 'User'}</div>
-                        <div className="text-xs text-gray-500 italic">{userLocalStorage.n_group}</div>
-                    </div> */}
             <ul>
               <li>
                 <Link

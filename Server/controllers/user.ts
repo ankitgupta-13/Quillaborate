@@ -55,27 +55,18 @@ export const googleLogin = async (
   next: NextFunction
 ) => {
   try {
-    const { email, username, avatar, googleId } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      const newUser = new User({
-        email: email,
-        username: username,
-        avatar: avatar,
-        googleId: googleId,
-      });
+      const newUser = new User(req.body);
       await newUser.save();
       const token = generateToken(newUser._id);
       return res.status(200).json({
-        message: "User logged in successfully",
-        newUser,
+        user: newUser,
         token: token,
       });
     } else {
       const token = generateToken(user._id);
-      return res
-        .status(200)
-        .json({ message: "User logged in successfully", user, token: token });
+      return res.status(200).json({ user, token: token });
     }
   } catch (err) {
     next(err);

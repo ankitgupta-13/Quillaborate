@@ -9,6 +9,7 @@ import {
 } from "@syncfusion/ej2-react-documenteditor";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOneDocument } from "../api/document-api";
+import { baseURL } from "../api/common-api";
 // Inject require module.
 DocumentEditorContainerComponent.Inject(
   SfdtExport,
@@ -32,7 +33,7 @@ function DocumentPage() {
         await documentEditorRef.current.documentEditor.saveAsBlob("Sfdt");
       const docData = await blobToText(sfdtBlob);
       console.log(typeof docData);
-      const res = await fetch("http://localhost:8000/api/doc/saveDocument", {
+      const res = await fetch(`${baseURL}/api/doc/saveDocument`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
