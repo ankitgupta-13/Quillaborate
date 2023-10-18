@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user";
 import cors from "cors";
-import docRoutes from './routes/document'
+import docRoutes from "./routes/document";
 dotenv.config();
 const app = express();
 
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://quillaborate.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],

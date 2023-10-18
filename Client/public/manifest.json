@@ -3,7 +3,7 @@
   "name": "MoU Document Editor and Contrib (Sign)",
   "icons": [
     {
-      "src": "document.jpg",
+      "src": "doc_icon.png",
       "type": "image/jpg",
       "sizes": "500x500"
     }
