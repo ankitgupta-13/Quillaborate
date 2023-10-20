@@ -13,6 +13,7 @@ import { baseURL } from "../api/common-api";
 import lockIcon from "../assets/img/lock.svg";
 import ModalShare from "../component/modal/ModalShare";
 import Header from "../component/Header";
+import { toast } from "react-toastify";
 // Inject require module.
 DocumentEditorContainerComponent.Inject(
   SfdtExport,
@@ -51,6 +52,7 @@ function DocumentPage() {
       });
       const data = await res.json();
       if (res.status === 201) {
+        toast.success("Document Saved Successfully");
         navigate("/dashboard/document-user");
         if (
           creator !== undefined &&
@@ -64,9 +66,11 @@ function DocumentPage() {
             body: JSON.stringify({
               docId: data._id,
               contributorId: localStorage.getItem("userId"),
+              contributorName: JSON.parse(localStorage.getItem("user")).name,
               creatorId: creator._id,
               creatorEmail: creator.email,
-              url: `http://localhost:3000/document/${data._id}`,
+              // url: `http://localhost:3000/document/${data._id}`,
+              url: `https://quillaborate.vercel.app/document/${data._id}`,
             }),
           });
           const data2 = await resp.json();

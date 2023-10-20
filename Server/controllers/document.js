@@ -58,11 +58,11 @@ const deleteDocument = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.deleteDocument = deleteDocument;
 const shareDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { url, senderEmail, receiverEmail } = req.body;
-    yield mailer(url, receiverEmail);
+    yield shareMail(url, receiverEmail);
     return res.json({ mess: "messageSent" });
 });
 exports.shareDocument = shareDocument;
-const mailer = (url, receiverEmail) => __awaiter(void 0, void 0, void 0, function* () {
+const shareMail = (url, receiverEmail) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: "gmail",
         port: 465,
@@ -75,8 +75,11 @@ const mailer = (url, receiverEmail) => __awaiter(void 0, void 0, void 0, functio
     var mailOptions = {
         from: process.env.EMAIL,
         to: receiverEmail,
-        subject: "URL for the document",
-        text: `Your URL is ${url}`,
+        subject: "Request for Collaborative Edits on the Document",
+        text: `I hope this message finds you well. I am reaching out with an opportunity for collaboration on the document. Your insights and expertise would be immensely valuable in enhancing this document.
+
+    To facilitate this collaboration, I would like to share the document with you.
+    Please find the document accessible via the following link: ${url}`,
     };
     yield transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
@@ -88,8 +91,34 @@ const mailer = (url, receiverEmail) => __awaiter(void 0, void 0, void 0, functio
     });
 });
 const sendAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { docId, contributorId, creatorId, url, creatorEmail } = req.body;
-    yield mailer(url, creatorEmail);
+    const { docId, contributorId, contributorName, creatorId, url, creatorEmail, } = req.body;
+    yield adminMail(url, creatorEmail, contributorName);
     return res.json({ mess: "messageSent" });
 });
 exports.sendAdmin = sendAdmin;
+const adminMail = (url, receiverEmail, contributorName) => __awaiter(void 0, void 0, void 0, function* () {
+    const transporter = nodemailer_1.default.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
+        },
+    });
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: receiverEmail,
+        subject: "Review and Incorporation of Contributor's Changes in the Document",
+        text: `I hope this message finds you well. I am writing to inform you that ${contributorName} has made some changes to document and we believe these changes could be valuable additions to our database. We kindly request your review and consideration.
+    Please find the document accessible via the following link: ${url}`,
+    };
+    yield transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log("Email sent: " + info.response);
+        }
+    });
+});

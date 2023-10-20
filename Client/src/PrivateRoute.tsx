@@ -12,8 +12,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
   const navigate = useNavigate();
   useEffect(() => {
     setPreviousLocation(window.location.href);
-    // localStorage.setItem("prevLocation",window.location.href);
-    
   }, []);
   return (
     <div>

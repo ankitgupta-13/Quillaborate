@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { useNavigate, redirect } from "react-router-dom";
@@ -75,7 +75,6 @@ const Login = ({ setUserData, prevLocation }) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("user", JSON.stringify(data.user));
-      console.log(prevLocation);
       prevLocation !== ""
         ? window.location.replace(prevLocation)
         : navigate("/dashboard", { replace: true });
@@ -104,6 +103,12 @@ const Login = ({ setUserData, prevLocation }) => {
       });
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-soft py-6 flex flex-col justify-center sm:py-12">

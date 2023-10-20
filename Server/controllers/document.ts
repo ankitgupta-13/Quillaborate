@@ -45,11 +45,11 @@ export const deleteDocument = async (req: Request, res: Response) => {
 
 export const shareDocument = async (req: Request, res: Response) => {
   const { url, senderEmail, receiverEmail } = req.body;
-  await mailer(url, receiverEmail);
-  return res.json({mess:"messageSent"})
+  await shareMail(url, receiverEmail);
+  return res.json({ mess: "messageSent" });
 };
 
-const mailer = async (url, receiverEmail) => {
+const shareMail = async (url, receiverEmail) => {
   const transporter = nodeMailer.createTransport({
     service: "gmail",
     port: 465,
@@ -62,8 +62,11 @@ const mailer = async (url, receiverEmail) => {
   var mailOptions = {
     from: process.env.EMAIL,
     to: receiverEmail,
-    subject: "URL for the document",
-    text: `Your URL is ${url}`,
+    subject: "Request for Collaborative Edits on the Document",
+    text: `I hope this message finds you well. I am reaching out with an opportunity for collaboration on the document. Your insights and expertise would be immensely valuable in enhancing this document.
+
+    To facilitate this collaboration, I would like to share the document with you.
+    Please find the document accessible via the following link: ${url}`,
   };
   await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -75,7 +78,41 @@ const mailer = async (url, receiverEmail) => {
 };
 
 export const sendAdmin = async (req: Request, res: Response) => {
-  const { docId, contributorId, creatorId, url, creatorEmail } = req.body;
-  await mailer(url, creatorEmail);
-  return res.json({mess:"messageSent"})
+  const {
+    docId,
+    contributorId,
+    contributorName,
+    creatorId,
+    url,
+    creatorEmail,
+  } = req.body;
+  await adminMail(url, creatorEmail, contributorName);
+  return res.json({ mess: "messageSent" });
+};
+
+const adminMail = async (url, receiverEmail, contributorName) => {
+  const transporter = nodeMailer.createTransport({
+    service: "gmail",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+  var mailOptions = {
+    from: process.env.EMAIL,
+    to: receiverEmail,
+    subject:
+      "Review and Incorporation of Contributor's Changes in the Document",
+    text: `I hope this message finds you well. I am writing to inform you that ${contributorName} has made some changes to document and we believe these changes could be valuable additions to our database. We kindly request your review and consideration.
+    Please find the document accessible via the following link: ${url}`,
+  };
+  await transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
 };

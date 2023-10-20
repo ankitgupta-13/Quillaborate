@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const baseURL = "http://localhost:8000"                          // Local
+// export const baseURL = "http://localhost:8000"                          // Local
+export const baseURL = "https://quillaborate.onrender.com"                 // Render
 
 const api = axios.create({
     baseURL: baseURL,
