@@ -101,7 +101,7 @@ const Register =  () => {
             <div className='flex flex-col items-center text-sms mt-7'>
                 <div className='mb-3'>Already have an account ? {' '}
                     <span className='text-red-800 hover:text-red-600 font-medium'>
-                        <Link to='/auth'>
+                        <Link to='/auth/sign-in'>
                             Sign In
                         </Link>
                     </span>

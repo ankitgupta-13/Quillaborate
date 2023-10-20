@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shareDocument = exports.deleteDocument = exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
+exports.sendAdmin = exports.shareDocument = exports.deleteDocument = exports.getDocument = exports.getAllDocuments = exports.saveDocument = void 0;
 const Document_1 = __importDefault(require("../models/Document"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const saveDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,7 +38,7 @@ const getAllDocuments = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.getAllDocuments = getAllDocuments;
 const getDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const document = yield Document_1.default.findById(req.params.id);
+        const document = yield Document_1.default.findById(req.params.id).populate("creator");
         res.status(200).json(document);
     }
     catch (error) {
@@ -58,10 +58,11 @@ const deleteDocument = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.deleteDocument = deleteDocument;
 const shareDocument = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { url, senderEmail, receiverEmail } = req.body;
-    mailer(url, senderEmail, receiverEmail);
+    yield mailer(url, receiverEmail);
+    return res.json({ mess: "messageSent" });
 });
 exports.shareDocument = shareDocument;
-const mailer = (url, senderEmail, receiverEmail) => {
+const mailer = (url, receiverEmail) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: "gmail",
         port: 465,
@@ -72,12 +73,12 @@ const mailer = (url, senderEmail, receiverEmail) => {
         },
     });
     var mailOptions = {
-        from: senderEmail,
+        from: process.env.EMAIL,
         to: receiverEmail,
         subject: "URL for the document",
         text: `Your URL is ${url}`,
     };
-    transporter.sendMail(mailOptions, function (error, info) {
+    yield transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         }
@@ -85,4 +86,10 @@ const mailer = (url, senderEmail, receiverEmail) => {
             console.log("Email sent: " + info.response);
         }
     });
-};
+});
+const sendAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { docId, contributorId, creatorId, url, creatorEmail } = req.body;
+    yield mailer(url, creatorEmail);
+    return res.json({ mess: "messageSent" });
+});
+exports.sendAdmin = sendAdmin;

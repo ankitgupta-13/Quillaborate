@@ -12,6 +12,7 @@ import { getOneDocument } from "../api/document-api";
 import { baseURL } from "../api/common-api";
 import lockIcon from "../assets/img/lock.svg";
 import ModalShare from "../component/modal/ModalShare";
+import Header from "../component/Header";
 // Inject require module.
 DocumentEditorContainerComponent.Inject(
   SfdtExport,
@@ -27,6 +28,7 @@ function DocumentPage() {
   const [filename, setFilename] = useState("");
   const navigate = useNavigate();
   const [modalOut, showModalOut] = useState(false);
+  const [creator, setCreator] = useState({});
 
   const handleSaveDocument = async () => {
     try {
@@ -35,7 +37,7 @@ function DocumentPage() {
       const sfdtBlob =
         await documentEditorRef.current.documentEditor.saveAsBlob("Sfdt");
       const docData = await blobToText(sfdtBlob);
-      console.log(typeof docData);
+
       const res = await fetch(`${baseURL}/api/doc/saveDocument`, {
         method: "POST",
         headers: {
@@ -48,7 +50,29 @@ function DocumentPage() {
         }),
       });
       const data = await res.json();
-      if (res.status === 201) navigate("/dashboard/document-user");
+      if (res.status === 201) {
+        navigate("/dashboard/document-user");
+        if (
+          creator !== undefined &&
+          creator._id !== localStorage.getItem("userId")
+        ) {
+          const resp = await fetch(`${baseURL}/api/doc/sendAdmin`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              docId: data._id,
+              contributorId: localStorage.getItem("userId"),
+              creatorId: creator._id,
+              creatorEmail: creator.email,
+              url: `http://localhost:3000/document/${data._id}`,
+            }),
+          });
+          const data2 = await resp.json();
+          console.log("hi from pp");
+        }
+      }
 
       const docxBase64 = await blobToBase64(docxBlob);
       // console.log('Docx:', docxBase64);
@@ -100,8 +124,11 @@ function DocumentPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getOneDocument(document_id);
-      const contents = res.data;
+      console.log(document_id);
       console.log(res);
+      const contents = res.data;
+      setCreator(res.creator);
+      console.log(res.creator);
       documentEditorRef.current.documentEditor.open(contents);
     };
 

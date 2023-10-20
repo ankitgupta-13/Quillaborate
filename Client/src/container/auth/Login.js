@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
 import { authLogin, baseURL } from "../../api/common-api";
@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
 
-const Login = ({ setUserData }) => {
+const Login = ({ setUserData, prevLocation }) => {
   const [loader, showLoader] = useState(false);
 
   const navigate = useNavigate();
@@ -36,7 +36,10 @@ const Login = ({ setUserData }) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data.userId);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/dashboard", { replace: true });
+        console.log(prevLocation);
+        prevLocation !== ""
+          ? window.location.replace(prevLocation)
+          : navigate("/dashboard", { replace: true });
       } else {
         toast.error(res.data.message);
         showLoader(false);
@@ -72,7 +75,10 @@ const Login = ({ setUserData }) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
+      console.log(prevLocation);
+      prevLocation !== ""
+        ? window.location.replace(prevLocation)
+        : navigate("/dashboard", { replace: true });
       toast("You are successfully logged in!", {
         position: "top-center",
         autoClose: 2000,

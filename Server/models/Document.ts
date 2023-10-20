@@ -11,8 +11,8 @@ const DocumentSchema = new mongoose.Schema(
       required: true,
     },
     creator: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     collaborators: [
       {

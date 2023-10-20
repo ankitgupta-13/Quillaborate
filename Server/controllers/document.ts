@@ -27,7 +27,7 @@ export const getAllDocuments = async (
 
 export const getDocument = async (req: Request, res: Response) => {
   try {
-    const document = await Document.findById(req.params.id);
+    const document = await Document.findById(req.params.id).populate("creator");
     res.status(200).json(document);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -45,10 +45,11 @@ export const deleteDocument = async (req: Request, res: Response) => {
 
 export const shareDocument = async (req: Request, res: Response) => {
   const { url, senderEmail, receiverEmail } = req.body;
-  mailer(url, senderEmail, receiverEmail);
+  await mailer(url, receiverEmail);
+  return res.json({mess:"messageSent"})
 };
 
-const mailer = (url, senderEmail, receiverEmail) => {
+const mailer = async (url, receiverEmail) => {
   const transporter = nodeMailer.createTransport({
     service: "gmail",
     port: 465,
@@ -59,16 +60,22 @@ const mailer = (url, senderEmail, receiverEmail) => {
     },
   });
   var mailOptions = {
-    from: senderEmail,
+    from: process.env.EMAIL,
     to: receiverEmail,
     subject: "URL for the document",
     text: `Your URL is ${url}`,
   };
-  transporter.sendMail(mailOptions, function (error, info) {
+  await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
       console.log("Email sent: " + info.response);
     }
   });
+};
+
+export const sendAdmin = async (req: Request, res: Response) => {
+  const { docId, contributorId, creatorId, url, creatorEmail } = req.body;
+  await mailer(url, creatorEmail);
+  return res.json({mess:"messageSent"})
 };

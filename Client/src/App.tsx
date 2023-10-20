@@ -11,6 +11,8 @@ import DocumentPage from "./pages/DocumentPage";
 import DocumentUser from "./container/user/DocumentUser";
 import Profile from "./container/Profile";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import PrivateRoute from "./PrivateRoute";
+import Login from "./container/auth/Login";
 
 const App = () => {
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "undefined";
@@ -19,8 +21,14 @@ const App = () => {
       <div className="font-poppins">
         <Router>
           <Routes>
-            <Route path="/" element={<Navigate replace to="auth/sign-in" />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Navigate replace to="/auth/sign-in" />} />
+            <Route
+              path="/dashboard/"
+              element={<PrivateRoute Component={Dashboard} />}
+            />
+            <Route path="/auth/*" element={<Auth />} />
+            <Route path="/auth/sign-in" element={<Login prevLocation={""} />} />
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route
               path="/dashboard/document-user/dashboard"
               element={<Navigate replace to="/dashboard" />}
@@ -35,8 +43,10 @@ const App = () => {
               element={<Navigate replace to="/dashboard/document-user" />}
             />
             <Route path="/dashboard/profile" element={<Profile />} />
-            <Route path="/auth/*" element={<Auth />} />
-            <Route path="/document/:document_id" element={<DocumentPage />} />
+            <Route
+              path="/document/:document_id"
+              element={<PrivateRoute Component={DocumentPage} />}
+            />
             <Route path="/document-example" element={<DocumentPage />} />
           </Routes>
         </Router>
