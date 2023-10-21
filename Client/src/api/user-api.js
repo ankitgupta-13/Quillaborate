@@ -87,7 +87,7 @@ export const deleteUser = async (userID) => {
 
 export const changePasswordUser = async (userID, payload) => {
     try {
-        const data = await axios.put(baseURL + '/user/change/password/' + userID, payload, {
+        const data = await axios.put(baseURL + '/user/changePassword/' + userID, payload, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem("doc-token")}`,
                 Accept: "application/json",

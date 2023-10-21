@@ -65,8 +65,8 @@ const shareMail = async (url, receiverEmail) => {
     subject: "Request for Collaborative Edits on the Document",
     text: `I hope this message finds you well. I am reaching out with an opportunity for collaboration on the document. Your insights and expertise would be immensely valuable in enhancing this document.
 
-    To facilitate this collaboration, I would like to share the document with you.
-    Please find the document accessible via the following link: ${url}`,
+To facilitate this collaboration, I would like to share the document with you.
+Please find the document accessible via the following link: ${url}`,
   };
   await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -106,7 +106,7 @@ const adminMail = async (url, receiverEmail, contributorName) => {
     subject:
       "Review and Incorporation of Contributor's Changes in the Document",
     text: `I hope this message finds you well. I am writing to inform you that ${contributorName} has made some changes to document and we believe these changes could be valuable additions to our database. We kindly request your review and consideration.
-    Please find the document accessible via the following link: ${url}`,
+Please find the document accessible via the following link: ${url}`,
   };
   await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {

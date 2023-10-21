@@ -9,4 +9,6 @@ const router = express_1.default.Router();
 router.post("/register", user_1.createUser);
 router.post("/login", user_1.login);
 router.post("/googleLogin", user_1.googleLogin);
+router.post("/forgotPassword", user_1.forgotPassword);
+router.post("/changePassword", user_1.changePassword);
 exports.default = router;

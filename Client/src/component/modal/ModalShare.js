@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { baseURL } from "../../api/common-api";
+import { toast } from "react-toastify";
 
-const ModalShare = ({ onCancel, onCopy }) => {
+const ModalShare = ({ onCancel, onCopy, copy }) => {
   const [email, setEmail] = useState("");
 
   const handleShareLink = async () => {
@@ -27,18 +28,23 @@ const ModalShare = ({ onCancel, onCopy }) => {
       ></div>
 
       {/* Modal Content */}
-      <div className="bg-soft w-9/12 md:w-2/5 mx-auto my-auto p-5 rounded-xl shadow-2xl z-50">
-        {/* Body */}
-        <div className="flex flex-col justify-center items-center text-center">
+      <form
+        onSubmit={handleShareLink}
+        className="bg-soft w-9/12 md:w-2/5 mx-auto my-auto p-5 rounded-xl shadow-2xl z-50"
+      >
+        <div className="flex flex-col justify-center items-center text-center gap-4">
           <h1 className="text-xl font-semibold text-gray-900">Share</h1>
-          {/* <h1 className="text-sm md:text-base my-10">{message}</h1> */}
           <input
             type="email"
             className="w-80 h-10 border border-blue-500 p-1"
             placeholder="Add people and groups"
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <div className="w-full flex item-center justify-center tex-sm md:text-base">
+            {copy && <p className="text-green-500 font-medium">Link copied!</p>
+              ? ""
+              : ""}
             <button
               className="px-4 py-1.5 bg-gray-500 rounded-2xl text-white hover:bg-black mx-1.5 md:mx-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
               onClick={onCopy}
@@ -47,15 +53,13 @@ const ModalShare = ({ onCancel, onCopy }) => {
             </button>
             <button
               className="px-8 py-1.5 bg-red-800 rounded-2xl text-white hover:bg-red-600 mx-1.5 md:mx-2.5 font-medium transition duration-200 ease-in-out transform hover:scale-105"
-              onClick={() => handleShareLink()}
+              type="submit"
             >
               Done
             </button>
           </div>
         </div>
-        {/* End Body */}
-      </div>
-      {/* End Modal Content */}
+      </form>
     </div>
   );
 };

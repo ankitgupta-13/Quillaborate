@@ -18,6 +18,7 @@ import ModalConfirm from "../component/modal/ModalConfirm";
 import ModalFormChangePassword from "../component/modal/ModalFormChangePassword";
 import { setUserData } from "../reduxs/action/actions";
 import Helper from "../utils/Helper";
+import { baseURL } from "../api/common-api";
 
 const BG_AVATAR = ["152e4d", "0891b2", "2E8B57", "8B4513", "4B0082", "999"];
 
@@ -50,100 +51,29 @@ const Profile = ({ user, setUserData }) => {
     [setValue]
   );
 
-  const fetchUser = useCallback(async () => {
-    showLoader(true);
-    const res = await getOneUserByID(
-      localStorage.getItem("doc-token"),
-      user.i_id
-    );
-
-    console.log("Fetch One User :", res);
-    showLoader(false);
-    if (res.data) {
-      if (res.data.status === "00") {
-        setdefaultValue(res.data.data);
-        setUserData(res.data.data);
-      } else {
-        if (res.data.message) {
-          toast.error(res.data.message);
-        } else {
-          toast.error(`${res.config?.url} ${res.status} ${res.statusText}`);
-        }
-      }
-    } else {
-      toast.error(`${res.config?.url} ${res.message}`);
-    }
-  }, [user.i_id, setUserData, setdefaultValue]);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
-  const onValid = async (dataform) => {
-    showLoader(true);
-    const { e_fullname, e_phone_number, e_email } = dataform;
-
-    const payload = {
-      e_fullname,
-      e_phone_number: Helper.IDPhoneNumber(e_phone_number),
-      e_email,
-      i_group: user.i_group,
-    };
-
-    const res = await updateUser(user.i_id, payload);
-
-    console.log("Update User :", res);
-    if (res.data) {
-      if (res.data.status === "00") {
-        toast.success(res.data.message);
-        setIsUpdate(false);
-        fetchUser();
-      } else {
-        if (res.data.message) {
-          toast.error(res.data.message);
-        } else {
-          toast.error(`${res.config?.url} ${res.status} ${res.statusText}`);
-        }
-      }
-    } else {
-      toast.error(`${res.config?.url} ${res.message}`);
-    }
-  };
-
-  const handleSubmitChangePassword = async (payload) => {
-    showLoader(true);
-
-    const res = await changePasswordUser(user.i_id, payload);
-
-    console.log("Update password :", res);
-    showLoader(false);
-    if (res.data) {
-      if (res.data.status === "00") {
-        toast.success("Password changed, please login again!");
+  const handleSubmitChangePassword = async (password) => {
+    try {
+      const response = await fetch(`${baseURL}/api/user/changePassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: JSON.parse(localStorage.getItem("user")).email,
+          newPassword: password.e_password,
+        }),
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success("Password changed successfully");
         showModalPassword(false);
-        setTimeout(() => {
-          handleLogout();
-        }, 500);
+        navigate("/auth/sign-in");
       } else {
-        if (res.data.message) {
-          toast.error(res.data.message);
-        } else {
-          toast.error(`${res.config?.url} ${res.status} ${res.statusText}`);
-        }
+        toast.error(data.message);
       }
-    } else {
-      toast.error(`${res.config?.url} ${res.message}`);
+    } catch (error) {
+      console.log(error);
     }
-  };
-
-  const handleMovePage = () => {
-    window.open("http://100.104.216.52", "_blank");
-  };
-
-  const handleReset = (e) => {
-    setIsUpdate(false);
-    setdefaultValue(user);
-    clearErrors();
   };
 
   const handleLogout = () => {
@@ -184,7 +114,7 @@ const Profile = ({ user, setUserData }) => {
           </div>
         </div>
 
-           <div className="bg-white text-text rounded-2xl shadow-2xl p-6 mt-6">
+        <div className="bg-white text-text rounded-2xl shadow-2xl p-6 mt-6">
           <h1 className="font-semibold mb-6">Help</h1>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <button

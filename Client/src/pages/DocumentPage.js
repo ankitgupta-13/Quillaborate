@@ -29,6 +29,7 @@ function DocumentPage() {
   const navigate = useNavigate();
   const [modalOut, showModalOut] = useState(false);
   const [creator, setCreator] = useState({});
+  const [copy, setCopy] = useState(false);
 
   const handleSaveDocument = async () => {
     try {
@@ -69,16 +70,11 @@ function DocumentPage() {
               creatorId: creator._id,
               creatorEmail: creator.email,
               url: `http://localhost:3000/document/${data._id}`,
-              // url: `https://quillaborate.vercel.app/document/${data._id}`,
             }),
           });
-          const data2 = await resp.json();
-          console.log("hi from pp");
         }
       }
-
       const docxBase64 = await blobToBase64(docxBlob);
-      // console.log('Docx:', docxBase64);
     } catch (err) {
       console.log("Err:", err);
     }
@@ -86,7 +82,6 @@ function DocumentPage() {
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
-    showModalOut(false);
   };
 
   const readBlobAsText = (blob) => {
@@ -157,9 +152,10 @@ function DocumentPage() {
           message="enter email to share"
           onCancel={() => showModalOut(false)}
           onCopy={() => copyLink()}
+          copy={copy}
         />
       )}
-      <div className="flex w-full items-center justify-between bg-red-600 hover:bg-red-650">
+      <div className="flex w-full items-center justify-between bg-red-600 hover:bg-red-650 px-2 h-10">
         <div></div>
         <div className="flex gap-3 items-center justify-center text-white bg-red-600 hover:bg-red-650 py-2 md:py-2.5 font-medium transition ">
           <input
@@ -169,23 +165,22 @@ function DocumentPage() {
               if (e.key === "Enter") handleSaveDocument();
             }}
             value={filename}
-            className="outline-none border-1 rounded  w-40 text-black "
+            className="outline-none border-1 rounded  w-40 h-7 text-black border-black px-2"
             required
           />
           <button
             onClick={handleSaveDocument}
-            className="px-3 bg-blue-200 hover:bg-red-800 font-medium transition duration-200 ease-in-out transform hover:scale-105"
+            className="flex items-center h-7 text-sm bg-gradient-to-r from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-3 h-6 border-1 border-transparent hover:border-red-800 hover:text-black"
           >
             Save
           </button>
         </div>
         <div>
           <button
-            on
-            className="flex text-black bg-blue-200 hover:bg-red-650 rounded-md w-24 p-1"
+            className="flex items-center gap-1 text-black text-sm bg-gradient-to-r h-7 from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-3 h-6 border-1 border-transparent hover:border-red-800 hover:text-black"
             onClick={() => showModalOut(true)}
           >
-            <img src={lockIcon} alt="" />
+            <img src={lockIcon} alt="" className="h-4" />
             Share
           </button>
         </div>

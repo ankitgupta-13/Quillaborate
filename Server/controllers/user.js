@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.googleLogin = exports.login = exports.createUser = void 0;
+exports.changePassword = exports.forgotPassword = exports.googleLogin = exports.login = exports.createUser = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const token_1 = require("../middlewares/token");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const salt = yield bcrypt_1.default.genSalt(10);
@@ -78,16 +79,64 @@ const googleLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.googleLogin = googleLogin;
-const resetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const forgotPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email } = req.body;
-        const user = yield User_1.default.findOne({ email: email });
-        if (!user) {
+        const user = yield User_1.default.findOne({ email });
+        if (!user)
             return res.status(404).json({ message: "Please enter a valid email" });
-        }
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        otpMail(otp, email);
+        return res.status(200).json({ message: "OTP sent successfully", otp: otp });
     }
     catch (err) {
         next(err);
     }
 });
-exports.resetPassword = resetPassword;
+exports.forgotPassword = forgotPassword;
+const otpMail = (otp, receiverEmail) => __awaiter(void 0, void 0, void 0, function* () {
+    const transporter = nodemailer_1.default.createTransport({
+        service: "gmail",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
+        },
+    });
+    var mailOptions = {
+        from: process.env.EMAIL,
+        to: receiverEmail,
+        subject: "Request for changing the password",
+        text: `We have received a request to reset your password for [Your Company's Name] account. If you did not make this request, please disregard this email.
+
+If you did request the password reset, please follow the instructions below to change your password:
+
+Enter the OTP to reset your password: ${otp}
+Enter your new password and confirm it.
+Click the 'Reset Password' button to complete the process.`,
+    };
+    yield transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log("Email sent: " + info.response);
+        }
+    });
+});
+const changePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, newPassword } = req.body;
+        console.log(newPassword);
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const hashedPassword = yield bcrypt_1.default.hash(newPassword, salt);
+        yield User_1.default.findOneAndUpdate({ email: email }, { password: hashedPassword });
+        console.log(newPassword);
+        return res.status(200).json({ message: "Password changed successfully" });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+exports.changePassword = changePassword;
