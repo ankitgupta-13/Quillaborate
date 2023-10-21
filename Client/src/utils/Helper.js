@@ -1,5 +1,3 @@
-// import * as Icons from "react-icons/md";
-
 class Helper {
     static validateForm = async (payload, allowEmpty) => {
         await Promise.all(Object.keys(payload).map(async key => {
@@ -20,39 +18,6 @@ class Helper {
         return payload
     }
 
-    static IDPhoneNumber = (phoneNumber) => {
-        let msisdn = ""
-        if(phoneNumber){
-            if (phoneNumber.charAt(0) === "0"){
-                msisdn = "62" + (phoneNumber.substring(1, phoneNumber.length))
-            }else{
-                msisdn = phoneNumber
-            }
-        }else{
-            msisdn = phoneNumber
-        }
-
-        return msisdn
-    }
-
-    static asyncLocalStorage = {
-        setItem: function (key, value) {
-            return Promise.resolve().then(function () {
-                return localStorage.setItem(key, value);
-            });
-        },
-        getItem: function (key) {
-            return Promise.resolve().then(function () {
-                return localStorage.getItem(key);
-            });
-        },
-        clear: function () {
-            return Promise.resolve().then(function () {
-                return localStorage.clear();
-            });
-        }
-    };
-
     static capitalEachWord = (letter) => {
         try {
             var separateWord = letter.toLowerCase().split(' ');
@@ -64,17 +29,6 @@ class Helper {
             return letter
         }
     }
-
-    /* Your icon name from database data can now be passed as prop */
-    // static DynamicIcon = ({ name }) => {
-    //     const IconComponent = Icons[name];
-
-    //     if (!IconComponent) { // Return a default one
-    //         return <Icons.MdHelp />;
-    //     }
-
-    //     return <IconComponent />;
-    // };
 }
 
 export default Helper

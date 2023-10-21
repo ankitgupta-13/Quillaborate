@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   DocumentEditorContainerComponent,
   WordExport,
@@ -12,7 +12,6 @@ import { getOneDocument } from "../api/document-api";
 import { baseURL } from "../api/common-api";
 import lockIcon from "../assets/img/lock.svg";
 import ModalShare from "../component/modal/ModalShare";
-import Header from "../component/Header";
 import { toast } from "react-toastify";
 // Inject require module.
 DocumentEditorContainerComponent.Inject(
@@ -69,8 +68,8 @@ function DocumentPage() {
               contributorName: JSON.parse(localStorage.getItem("user")).name,
               creatorId: creator._id,
               creatorEmail: creator.email,
-              // url: `http://localhost:3000/document/${data._id}`,
-              url: `https://quillaborate.vercel.app/document/${data._id}`,
+              url: `http://localhost:3000/document/${data._id}`,
+              // url: `https://quillaborate.vercel.app/document/${data._id}`,
             }),
           });
           const data2 = await resp.json();

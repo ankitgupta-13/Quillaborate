@@ -124,8 +124,8 @@ const Login = ({ setUserData, prevLocation }) => {
                 Welcome Back! Sign in to continue
               </h1>
             </div>
-            <div className="flex flex-col gap-3">
-              <div className="py-8 leading-6 space-y-4 text-gray-700 md:text-sm sm:leading-7">
+            <div className="flex flex-col gap-4">
+              <div className="leading-6 space-y-4 text-gray-700 md:text-sm sm:leading-7">
                 <div className="relative">
                   <input
                     autoComplete="off"
@@ -168,7 +168,14 @@ const Login = ({ setUserData, prevLocation }) => {
                     Password
                   </label>
                 </div>
-                <div className="relative flex justify-center top-7">
+                <div className="flex justify-end">
+                  <Link to="/auth/forgot-password">
+                    <span className="text-red-800 hover:text-red-600 font-medium">
+                      Forgot Password ?
+                    </span>
+                  </Link>
+                </div>
+                <div className="relative flex justify-center">
                   <button className="flex  text-sm bg-gradient-to-r from-red-800 to-black hover:from-transparent hover:to-transparent text-white rounded-md px-5 py-2 mt-1 border-1 border-transparent hover:border-red-800 hover:text-red-800">
                     Submit
                   </button>

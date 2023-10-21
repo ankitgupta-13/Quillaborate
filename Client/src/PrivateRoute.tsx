@@ -9,7 +9,6 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
   const { Component } = props;
   const [prevLocation, setPreviousLocation] = useState("");
-  const navigate = useNavigate();
   useEffect(() => {
     setPreviousLocation(window.location.href);
   }, []);

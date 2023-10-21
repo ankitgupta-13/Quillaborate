@@ -37,10 +37,10 @@ export const DashboardRoutes = [
 ];
 
 export const AuthRoutes = [
-  // {
-  //   path: "sign-in",
-  //   component: <Login />,
-  // },
+  {
+    path: "sign-in",
+    component: <Login prevLocation={""} />,
+  },
   {
     path: "sign-up",
     component: <Register />,

@@ -12,7 +12,7 @@ import DocumentUser from "./container/user/DocumentUser";
 import Profile from "./container/Profile";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import PrivateRoute from "./PrivateRoute";
-import Login from "./container/auth/Login";
+import ForgotPassword from "./container/auth/ForgotPassword";
 
 const App = () => {
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "undefined";
@@ -27,8 +27,6 @@ const App = () => {
               element={<PrivateRoute Component={Dashboard} />}
             />
             <Route path="/auth/*" element={<Auth />} />
-            <Route path="/auth/sign-in" element={<Login prevLocation={""} />} />
-            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             <Route
               path="/dashboard/document-user/dashboard"
               element={<Navigate replace to="/dashboard" />}
@@ -48,12 +46,12 @@ const App = () => {
               element={<PrivateRoute Component={DocumentPage} />}
             />
             <Route path="/document-example" element={<DocumentPage />} />
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </Router>
         <div className="text-sms">
           <ToastContainer
             position="bottom-right"
-            // theme='dark'
             autoClose={5000}
             hideProgressBar={false}
             newestOnTop={false}
