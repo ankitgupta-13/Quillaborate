@@ -41,7 +41,9 @@ app.use(
 app.use("/api/user", userRoutes);
 app.use("/api/doc", docRoutes);
 
-app.listen(8000, () => {
+const PORT = process.env.PORT || 8000;
+
+app.listen(PORT, () => {
   connectDB();
-  console.log("Server is running");
+  console.log("Server is running on PORT : " + PORT);
 });

@@ -13,6 +13,10 @@ const DocumentSchema = new mongoose_1.default.Schema({
         type: Object,
         required: true,
     },
+    docxBase64: {
+        type: String,
+        required: true,
+    },
     creator: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "User",

@@ -47,7 +47,8 @@ app.use((0, cors_1.default)({
 }));
 app.use("/api/user", user_1.default);
 app.use("/api/doc", document_1.default);
-app.listen(8000, () => {
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
     connectDB();
-    console.log("Server is running");
+    console.log("Server is running on PORT : " + PORT);
 });

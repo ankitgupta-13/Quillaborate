@@ -48,6 +48,7 @@ function DocumentPage() {
           title: filename,
           data: docData,
           creator: localStorage.getItem("userId"),
+          docxBase64: await blobToBase64(docxBlob),
         }),
       });
       const data = await res.json();
@@ -74,7 +75,6 @@ function DocumentPage() {
           });
         }
       }
-      const docxBase64 = await blobToBase64(docxBlob);
     } catch (err) {
       console.log("Err:", err);
     }
@@ -122,11 +122,8 @@ function DocumentPage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await getOneDocument(document_id);
-      console.log(document_id);
-      console.log(res);
       const contents = res.data;
       setCreator(res.creator);
-      console.log(res.creator);
       documentEditorRef.current.documentEditor.open(contents);
     };
 

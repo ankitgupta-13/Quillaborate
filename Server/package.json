@@ -2,12 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "node index.js",
-    "run": "nodemon index.ts"
+    "start": "node app.js",
+    "run": "nodemon app.ts"
   },
   "keywords": [],
   "author": "",
