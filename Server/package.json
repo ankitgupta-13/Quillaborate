@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "engines": {
+    "node": "v18.17.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node app.js",
-    "run": "nodemon app.ts",
-    "engines": {
-      "node": "v18.17.0"
-    }
+    "run": "nodemon app.ts"
   },
   "keywords": [],
   "author": "",
