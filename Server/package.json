@@ -9,7 +9,7 @@
     "start": "node app.js",
     "run": "nodemon app.ts",
     "engines": {
-      "node": ">=14.20.1"
+      "node": "v18.17.0"
     }
   },
   "keywords": [],
