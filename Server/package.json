@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node app.js",
-    "run": "nodemon app.ts"
+    "run": "nodemon app.ts",
+    "engines": {
+      "node": ">=14.20.1"
+    }
   },
   "keywords": [],
   "author": "",
