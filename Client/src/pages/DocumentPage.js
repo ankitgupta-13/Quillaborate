@@ -70,7 +70,7 @@ function DocumentPage() {
               contributorName: JSON.parse(localStorage.getItem("user")).name,
               creatorId: creator._id,
               creatorEmail: creator.email,
-              url: `http://localhost:3000/document/${data._id}`,
+              url: `https://quillaborate.vercel.app/document/${data._id}`,
             }),
           });
         }
