@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Login from "./container/auth/Login";
 
 interface PrivateRouteProps {
-  Component: React.ComponentType; // This specifies that Component should be a React component.
+  Component: React.ReactNode;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
@@ -15,7 +14,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
   return (
     <div>
       {localStorage.getItem("userId") ? (
-        <Component />
+        <>{Component}</>
       ) : (
         <Login prevLocation={prevLocation} />
       )}

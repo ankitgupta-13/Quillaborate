@@ -24,7 +24,7 @@ const App = () => {
             <Route path="/" element={<Navigate replace to="/auth/sign-in" />} />
             <Route
               path="/dashboard/"
-              element={<PrivateRoute Component={Dashboard} />}
+              element={<PrivateRoute Component={<Dashboard/>} />}
             />
             <Route path="/auth/*" element={<Auth />} />
             <Route
@@ -43,7 +43,7 @@ const App = () => {
             <Route path="/dashboard/profile" element={<Profile />} />
             <Route
               path="/document/:document_id"
-              element={<PrivateRoute Component={DocumentPage} />}
+              element={<PrivateRoute Component={<DocumentPage/>} />}
             />
             <Route path="/document-example" element={<DocumentPage />} />
             <Route path="/auth/forgot-password" element={<ForgotPassword />} />
