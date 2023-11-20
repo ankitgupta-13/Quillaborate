@@ -27,10 +27,8 @@ const ForgotPassword = () => {
         }),
       });
       const data = await response.json();
-      console.log(data);
       setCorrectOtp(data.otp);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -65,7 +63,6 @@ const ForgotPassword = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
     }
   };
 

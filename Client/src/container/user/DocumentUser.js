@@ -27,7 +27,6 @@ const DocumentUser = () => {
     });
     const data = await res.json();
     setListDocument(data.docs);
-    console.log(data.docs);
   }
   useEffect(() => {
     fetchAllDocs();

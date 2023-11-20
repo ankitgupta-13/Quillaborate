@@ -27,16 +27,13 @@ const Login = ({ setUserData, prevLocation }) => {
     showLoader(true);
 
     const res = await authLogin(dataForm);
-    console.log("Login :", res);
     if (res.data) {
-      console.log(res.data);
       if (res.status === 200) {
         const dataUser = { ...res.data.data };
         setUserData(dataUser);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data.userId);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        console.log(prevLocation);
         prevLocation !== ""
           ? window.location.replace(prevLocation)
           : navigate("/dashboard", { replace: true });
@@ -71,7 +68,6 @@ const Login = ({ setUserData, prevLocation }) => {
     });
     if (result.status === 200) {
       const data = await result.json();
-      console.log(data);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.user._id);
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -111,15 +107,15 @@ const Login = ({ setUserData, prevLocation }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-soft py-6 flex flex-col justify-center sm:py-12">
+    <div className="min-h-screen bg-soft py-6 flex flex-col justify-center sm:py-12 gap-3">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-800 to-black shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-800 to-black shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl md:-rotate-6"></div>
         <form
           onSubmit={handleSubmit(onValidForm)}
-          className="relative bg-white shadow-lg sm:rounded-3xl px-4 py-10 md:p-20"
+          className="relative bg-white shadow-lg sm:rounded-3xl px-4 py-10 md:p-20 md:w-full mx-auto sm:px-12 sm:py-5 sm:w-80"
         >
           <div className="md:max-w-md mx-auto">
-            <div>
+            <div className="mb-3">
               <h1 className="text-2xl font-semibold">
                 Welcome Back! Sign in to continue
               </h1>
@@ -182,9 +178,9 @@ const Login = ({ setUserData, prevLocation }) => {
                 </div>
               </div>
               <div className="flex items-center justify-center gap-2">
-                <hr class="h-px bg-gray-200 border-0 w-40 dark:bg-gray-700" />
+                <hr className="h-px bg-gray-200 border-0 w-20 md:w-40 dark:bg-gray-700" />
                 <div className="flex justify-center ">or</div>
-                <hr class="h-px bg-gray-200 border-0 w-40 dark:bg-gray-700" />
+                <hr className="h-px bg-gray-200 border-0 w-20 md:w-40 dark:bg-gray-700" />
               </div>
               <div className="flex justify-center">
                 <GoogleLogin

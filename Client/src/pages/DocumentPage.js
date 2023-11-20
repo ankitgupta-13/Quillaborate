@@ -76,7 +76,6 @@ function DocumentPage() {
         }
       }
     } catch (err) {
-      console.log("Err:", err);
     }
   };
 

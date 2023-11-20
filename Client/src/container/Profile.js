@@ -62,7 +62,6 @@ const Profile = ({ user, setUserData }) => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -74,9 +73,8 @@ const Profile = ({ user, setUserData }) => {
   return (
     <div className="flex item-center flex-col p-6 mb-auto">
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-base font-semibold">Profile</h1>
+        <h1 className="text-base font-semibold text-xl ml-2">Profile</h1>
       </div>
-
       <div>
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center mb-1">
