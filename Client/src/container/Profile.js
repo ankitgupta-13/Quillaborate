@@ -1,23 +1,15 @@
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators } from "redux";
-import {
-  updateUser,
-  getOneUserByID,
-  changePasswordUser,
-} from "../api/user-api";
-import { ButtonCancel, ButtonSave } from "../component/button/CustomButton";
-import ErrorField from "../component/ErrorField";
 import Loader from "../component/modal/Loader";
 import ModalConfirm from "../component/modal/ModalConfirm";
 import ModalFormChangePassword from "../component/modal/ModalFormChangePassword";
 import { setUserData } from "../reduxs/action/actions";
-import Helper from "../utils/Helper";
 import { baseURL } from "../api/common-api";
 
 const BG_AVATAR = ["152e4d", "0891b2", "2E8B57", "8B4513", "4B0082", "999"];
@@ -27,7 +19,6 @@ const inputText =
   "outline-none border-1 border-gray-200 rounded-lg py-2 px-3 sm:p-3 mt-1 focus:red-800 focus:ring-card2 focus:ring-1";
 
 const Profile = ({ user, setUserData }) => {
-  const [isUpdate, setIsUpdate] = useState(false);
   const [loader, showLoader] = useState(false);
   const [modalLogout, showModalLogout] = useState(false);
   const [modalPassword, showModalPassword] = useState(false);
@@ -39,7 +30,6 @@ const Profile = ({ user, setUserData }) => {
     formState: { errors },
     handleSubmit,
     setValue,
-    clearErrors,
   } = useForm({ criteriaMode: "all" });
 
   const setdefaultValue = useCallback(

@@ -14,7 +14,8 @@ import { baseURL } from "../../api/common-api";
 const DocumentUser = () => {
   const [loader, showLoader] = useState(false);
   const [listDocument, setListDocument] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   const navigate = useNavigate();
   async function fetchAllDocs() {
@@ -55,11 +56,14 @@ const DocumentUser = () => {
     link.click();
     link.remove();
   };
+  const toggleDropdown = (docId) => {
+    setOpenDropdownId((prevId) => (prevId === docId ? null : docId));
+  };
 
   return (
     <div
       onClick={() => {
-        if (dropdownOpen) setDropdownOpen(false);
+        if (openDropdownId != null) setOpenDropdownId(null);
       }}
       className="flex flex-col md:flex-row w-full h-screen overflow-hidden font-poppins bg-soft text-sm font-medium"
     >
@@ -75,7 +79,7 @@ const DocumentUser = () => {
         >
           Create Document
         </button>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap gap-2 lg:justify-start md:justify-around sm:justify-around">
           {listDocument.length > 0 ? (
             listDocument.map((data, key) => (
               <div
@@ -87,7 +91,7 @@ const DocumentUser = () => {
                     src={threeDots}
                     alt="Three Dots"
                     className="h-6 w-6 cursor-pointer"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    onClick={() => toggleDropdown(data._id)}
                   />
                 </div>
                 <div className="flex flex-col items-center bg-red-400 justify-around h-full">
@@ -111,7 +115,7 @@ const DocumentUser = () => {
                     </button>
                   </div>
                 </div>
-                {dropdownOpen && (
+                {openDropdownId === data._id && (
                   <div className="origin-top-right z-10 absolute top-10 right-0 w-max bg-white border border-gray-200 py-1.5 rounded shadow-lg overflow-hidden mt-1">
                     <div
                       onClick={() => handleDownloadDocument(data.docxBase64)}

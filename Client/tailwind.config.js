@@ -4,6 +4,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        sm: '320px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
+      },
       colors: {
         soft: '#f5f5f5',
         darkblue: '#091c29',
